@@ -1,22 +1,71 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Account from '@/views/Account'
+import Dashboard from '@/views/Dashboard'
+import Branch from '@/views/Branchs'
+import Product from '@/views/Product'
+import Post from '@/views/Post'
+import Invoice from '@/views/Invoice'
+import Global from '@/plugins/global'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path:'/',
+    redirect:{
+      name:'Account'
+    }
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path:'/account',
+    name:'Account',
+    component:Account,
+    beforeEnter:(to, from, next) => {
+      var response = Global.checkSession()
+      if (response) {
+        next({
+          name:'Dashboard'
+        })
+      }
+      next()
+    }
+  },
+  {
+    path:'/dashboard',
+    name:'Dashboard',
+    component:Dashboard,
+    beforeEnter: (to, from, next) => {
+      var response = Global.checkSession()
+      if (!response) {
+        next({
+          name:'Account'
+        })
+      }
+      next()
+    },
+    children:[
+      {
+        path:'branchs',
+        name:'Branch',
+        component:Branch
+      },
+      {
+        path:'products',
+        name:'Products',
+        component:Product
+      },
+      {
+        path:'post',
+        name:'Post',
+        component:Post
+      },
+      {
+        path:'invoice',
+        name:'Invoice',
+        component:Invoice
+      }
+    ]
   }
 ]
 
