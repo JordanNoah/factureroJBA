@@ -49,7 +49,7 @@
                                 <v-list-item-title>Dark mode</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
-                        <v-list-item link>
+                        <v-list-item link @click="closeSession()">
                             <v-list-item-icon>
                                 <v-icon>
                                     fas fa-sign-out-alt
@@ -83,6 +83,8 @@
 export default {
     data:() => ({
         items:[
+            { text: 'Resume', icon:'fa-solid fa-chart-pie', path:'/dashboard/resume' },
+            { text: 'Clients', icon:'fas fa-users', path:'/dashboard/clients' },
             { text: 'Branchs', icon: 'fas fa-city', path:'/dashboard/branchs' },
             { text: 'Products', icon:'fab fa-product-hunt', path:'/dashboard/products' },
             { text: 'Post', icon:'fas fa-pager' , path:'/dashboard/post'},
@@ -92,6 +94,10 @@ export default {
     methods:{
         setDarkmode(){
             this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+        },
+        closeSession(){
+            this.$global.removeSession()
+            this.$router.push({name:'Account'})
         }
     }
 }

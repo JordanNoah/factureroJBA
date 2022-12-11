@@ -17,7 +17,7 @@
                         <v-text-field outlined dense hide-details label="Search Invoice" clearable></v-text-field>
                     </v-col>
                     <v-col class="ml-auto" cols="auto">
-                        <v-btn depressed>
+                        <v-btn depressed @click="dialog=true">
                             <span class="mr-2">
                                 <v-icon x-small>
                                     fas fa-plus
@@ -94,7 +94,7 @@
                 </template>
             </v-data-table>
         </v-card>
-        <v-dialog v-model="dialog" fullscreen>
+        <v-dialog v-model="dialog" fullscreen persistent>
             <v-card>
                 <v-toolbar dense>
                     <v-btn icon @click="dialog = false" small>
@@ -108,12 +108,244 @@
                     </v-btn>
                 </v-toolbar>
                 <v-container fluid>
-                    <v-card>
+                    <v-card class="mb-2">
                         <v-card-title>
                             Invoice data
                         </v-card-title>
+                        <v-container>
+                            <v-row>
+                                <v-col>
+                                    <div>
+                                        Invoice
+                                    </div>
+                                    <div>
+                                        Atomatic
+                                    </div>
+                                </v-col>
+                                <v-col>
+                                    <div>
+                                        Status
+                                    </div>
+                                    <div>
+                                        New
+                                    </div>
+                                </v-col>
+                                <v-col>
+                                    <v-text-field outlined dense label="Date"></v-text-field>
+                                </v-col>
+                                <v-col>
+                                    <v-autocomplete outlined dense label="Client"></v-autocomplete>
+                                </v-col>
+                            </v-row>
+                        </v-container>
                     </v-card>
+                    <v-card>
+                        <v-card-title>
+                            Items
+                            <v-spacer></v-spacer>
+                            <v-text-field dense hide-details label="Search" outlined></v-text-field>
+                            <v-btn depressed class="mx-2" @click="dialogItemAddProduct = true">
+                                <v-icon small class="mx-2">
+                                    fas fa-plus
+                                </v-icon>
+                                <span>
+                                    Add product
+                                </span>
+                            </v-btn>
+                        </v-card-title>
+                        <v-container>
+                            <v-data-table :headers="headersInvoice"></v-data-table>
+                        </v-container>
+                    </v-card>
+                    <v-row class="my-2">
+                        <v-col cols="7">
+                            <v-card>
+                                <v-card-title>
+                                    Formas de Pago
+                                    <v-spacer></v-spacer>
+                                    <v-btn depressed text small>
+                                            <v-icon small class="mr-2">
+                                                fas fa-plus
+                                            </v-icon>
+                                            Agregar forma de pago
+                                        </v-btn>
+                                </v-card-title>
+                                <v-container>
+                                    <v-simple-table>
+                                        <template v-slot:default>
+                                            <tbody>
+                                                <tr v-for="item in 1" :key="item">
+                                                    <td>
+                                                        <v-text-field label="Forma de pago" outlined dense hide-details></v-text-field>
+                                                    </td>
+                                                    <td>
+                                                        <v-text-field label="Importe" outlined dense hide-details></v-text-field>
+                                                    </td>
+                                                    <td>
+                                                        <v-text-field label="Plazo" outlined dense hide-details></v-text-field>
+                                                    </td>
+                                                    <td>
+                                                        <v-text-field label="Unidad de tiempo" outlined dense hide-details></v-text-field>
+                                                    </td>
+                                                    <td>
+                                                        <v-btn icon small color="red">
+                                                            <v-icon small>
+                                                                far fa-trash-alt
+                                                            </v-icon>
+                                                        </v-btn>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </template>
+                                    </v-simple-table>
+                                </v-container>
+                            </v-card>
+                            <v-card class="mt-2">
+                                <v-card-title>
+                                    Información Adicional
+                                    <v-spacer></v-spacer>
+                                    <v-btn text small>
+                                        <v-icon small class="mr-2">
+                                            fas fa-plus
+                                        </v-icon>
+                                        <span>
+                                            Agregar Información adicional
+                                        </span>
+                                    </v-btn>
+                                </v-card-title>
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="4">
+                                            <v-text-field outlined hide-details dense label="Name"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="7">
+                                            <v-text-field outlined hide-details dense label="Description"></v-text-field>
+                                        </v-col>
+                                        <v-col class="d-flex align-center justify-start" cols="1">
+                                            <v-btn icon small>
+                                                <v-icon small>
+                                                    far fa-trash-alt
+                                                </v-icon>
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                        </v-col>
+                        <v-col>
+                            <v-card>
+                                <v-card-title>
+                                    Resumen
+                                </v-card-title>
+                                <v-divider></v-divider>
+                                <v-container>
+                                    <v-row justify="space-between">
+                                        <v-col cols="auto">
+                                            Subtotal sin iva:
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            20.00
+                                        </v-col>
+                                    </v-row>
+                                    <v-row justify="space-between">
+                                        <v-col cols="auto">
+                                            Impuesto:
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            20.00
+                                        </v-col>
+                                    </v-row>
+                                    <v-row justify="space-between">
+                                        <v-col cols="auto">
+                                            Descuento:
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            20.00
+                                        </v-col>
+                                    </v-row>
+                                    <v-row justify="space-between">
+                                        <v-col cols="auto">
+                                            Subtotal con iva:
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            20.00
+                                        </v-col>
+                                    </v-row>
+                                    <v-row justify="space-between">
+                                        <v-col cols="auto">
+                                            Total:
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            20.00
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                        </v-col>
+                    </v-row>
                 </v-container>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogItemAddProduct" min-width="500" max-width="1000" persistent>
+            <v-card>
+                <v-card-title>
+                    Add item
+                    <v-spacer></v-spacer>
+                    <v-text-field outlined dense hide-details label="Search"></v-text-field>
+                    <v-btn depressed class="mx-2" @click="dialogItemCreateProduct = true">
+                        <v-icon small class="mx-2">
+                            fas fa-plus
+                        </v-icon>
+                        Created product
+                    </v-btn>
+                </v-card-title>
+                <v-container>
+                    <v-data-table :headers="headersItemsProduct"></v-data-table>
+                </v-container>
+                <v-card-actions class="d-flex justify-end">
+                    <v-btn text color="error" @click="dialogItemAddProduct = false">
+                        Close
+                    </v-btn>
+                    <v-btn text color="success" @click="dialogItemAddProduct = false">
+                        Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogItemCreateProduct" min-width="500" max-width="700" persistent>
+            <v-card>
+                <v-card-title>
+                    Create product
+                </v-card-title>
+                <v-divider></v-divider>
+                <v-container>
+                    <v-row justify="center" align="center">
+                        <v-col cols="5">
+                            <v-img
+                                src="https://www.jessicagavin.com/wp-content/uploads/2020/07/how-to-cook-pasta-3-1200-500x375.jpg">
+                            </v-img>
+                        </v-col>
+                        <v-divider vertical></v-divider>
+                        <v-col cols="7">
+                            <v-autocomplete outlined dense label="name"></v-autocomplete>
+                            <v-autocomplete outlined dense label="Brand"></v-autocomplete>
+                            <v-select outlined dense label="Packages"></v-select>
+                            <v-text-field outlined dense label="Quantity"></v-text-field>
+                            <v-text-field outlined dense label="Unit Price"></v-text-field>
+                            <v-text-field outlined dense label="Iva"></v-text-field>
+                            <v-text-field outlined dense label="Discount"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-container>
+                <v-divider></v-divider>
+                <v-card-actions class="d-flex justify-end">
+                    <v-btn text color="error" @click="dialogItemCreateProduct = false">
+                        Close
+                    </v-btn>
+                    <v-btn text color="success" @click="dialogItemCreateProduct = false">
+                        Save
+                    </v-btn>
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </v-container>
@@ -123,7 +355,9 @@
 import {v4} from 'uuid'
 export default {
     data:()=>({
-        dialog:true,
+        dialogItemCreateProduct:false,
+        dialogItemAddProduct:false,
+        dialog:false,
         selected:[],
         headers:[
             {
@@ -415,7 +649,88 @@ export default {
                     name:'Created'
                 }
             }
-        ]
+        ],
+        headersItemsProduct:[
+           {
+                text:'Avatar',
+                value:'avatar'
+            },
+            {
+                text:'Name',
+                value:'name'
+            },
+            {
+                text:'Brand',
+                value:'brand'
+            },
+            {
+                text:'Packages',
+                value:'package'
+            },
+            {
+                text:'Quantity',
+                value:'quantity'
+            },
+            {
+                text:'Precio Unitario',
+                value:'pvp'
+            },
+            {
+                text:'IVA',
+                value:'iva'
+            },
+            {
+                text:'Discount',
+                value:'discount'
+            },
+            {
+                text:'Total Price',
+                value:'totalPrice'
+            },
+            {
+                text:'Actions',
+                value:'actions'
+            }
+        ],
+        headersInvoice:[
+            {
+                text:'Quantity',
+                value:'quantity'
+            },
+            {
+                text:'Code',
+                value:'code'
+            },
+            {
+                text:'Description',
+                value:'description'
+            },
+            {
+                text:'Type',
+                value:'type'
+            },
+            {
+                text:'V.unit',
+                value:'vunit'
+            },
+            {
+                text:'Disc.',
+                value:'discount'
+            },
+            {
+                text:'V.total',
+                value:'vtotal'
+            },
+            {
+                text:'Tax',
+                value:'tax'
+            },
+            {
+                text:'Action',
+                value:'actions'
+            }
+        ],
+        itemsInvoice:[]
     })
 }
 </script>

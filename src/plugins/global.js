@@ -4,6 +4,9 @@ const global = {
     initSession(){
         localStorage.setItem('sessionKey',v4())
     },
+    removeSession(){
+        localStorage.removeItem('sessionKey')
+    },
     checkSession(){
         if (localStorage.getItem('sessionKey')) {
             return true

@@ -9,9 +9,12 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.3",
+    "apexcharts": "^3.36.3",
     "core-js": "^3.8.3",
+    "email-generator": "^1.0.1",
     "register-service-worker": "^1.7.2",
     "roboto-fontface": "*",
+    "unique-names-generator": "^4.7.1",
     "uuid": "^9.0.0",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",

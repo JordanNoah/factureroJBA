@@ -8,7 +8,7 @@
                     </v-col>
                     <v-col cols="4"></v-col>
                     <v-col class="d-flex justify-end">
-                        <v-btn depressed>
+                        <v-btn depressed @click="dialog = true">
                             <span class="mr-2">
                                 <v-icon x-small>
                                     fas fa-plus
@@ -74,7 +74,7 @@
 import {v4} from 'uuid'
 export default {
     data:()=>({
-        dialog:true,
+        dialog:false,
         headers:[
             {
                 text:'Branch office',
