@@ -66,10 +66,10 @@
                                 <v-col cols="6">
                                     <v-row>
                                         <v-col cols="12">
-                                            <v-text-field outlined dense label="Email"></v-text-field>
+                                            <v-text-field outlined dense label="Email" v-model="email"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field outlined dense label="Password" hide-details="auto"></v-text-field>
+                                            <v-text-field outlined dense label="Password" hide-details="auto" v-model="password"></v-text-field>
                                             <div class="d-flex justify-end my-2">
                                                 <router-link class="mx-2" :to="{ name: 'Forgot password'}">Forgot password?</router-link>
                                             </div>
@@ -96,12 +96,20 @@
 
 <script>
 export default {
+    data:()=>({
+        email:null,
+        password:null
+    }),
     methods:{
-        initSession(){
-            this.$global.initSession()
-            this.$router.push({name:'Dashboard'}).catch((e) => {
-                console.log(e);
-            })
+        async initSession(){
+            const body = new Object()
+            body.email = this.email
+            body.password = this.password
+            
+            var response = await this.$provider.signIn(body)
+            if(response.data){
+                this.$global.initSession(response.data.user)
+            }
         }
     }
 }

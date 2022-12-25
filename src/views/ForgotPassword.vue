@@ -3,7 +3,7 @@
         <v-row style="height:100%">
             <v-col cols="5">
                 <v-container fluid fill-height style="background-color:#007BFF">
-                    <div class="text-h4 font-italic font-weight-bold pa-7" style="color:#ffffff" >
+                    <div class="text-h4 font-italic font-weight-bold pa-7" style="color:#ffffff">
                         FactureroJBA
                     </div>
                     <div class="pa-7">
@@ -24,30 +24,75 @@
                     <v-container class="py-16">
                         <v-row justify="center">
                             <v-col cols="7" class="text-h4 font-weight-bold my-4">
-                               Forgot Password?
+                                <v-btn icon small @click="goBack()">
+                                    <v-icon small>
+                                        fas fa-chevron-left
+                                    </v-icon>
+                                </v-btn>
+                                Forgot Password?
                             </v-col>
                             <v-col cols="7" class="pb-9">
-                                Enter the email address you used when you joined and we’ll send you instructions to reset your password.
+                                Enter the email address you used when you joined and we’ll send you instructions to
+                                reset your password.
                                 <br><br>
-                                For security reasons, we do NOT store your password. So rest assured that we will never send your password via email.
+                                For security reasons, we do NOT store your password. So rest assured that we will never
+                                send your password via email.
                             </v-col>
                         </v-row>
-                            <v-row justify="center">
-                                <v-col cols="7">
-                                    <v-text-field label="Email" dense outlined></v-text-field>
-                                </v-col>
-                            </v-row>
-                        
-                            <v-row justify="center">
-                                <v-col cols="6" class="d-flex justify-center">
-                                    <v-btn block depressed color="#F2D184">
-                                        Send reset instruction
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
+                        <v-row justify="center">
+                            <v-col cols="7">
+                                <v-text-field v-model="email" :rules="emailRules" label="Email" dense outlined>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+
+                        <v-row justify="center">
+                            <v-col cols="6" class="d-flex justify-center">
+                                <v-btn block depressed color="#F2D184" @click="sendResetMail()">
+                                    Send reset instruction
+                                </v-btn>
+                            </v-col>
+                        </v-row>
                     </v-container>
                 </v-card>
             </v-col>
         </v-row>
+        <v-snackbar v-model="snackbar">
+            {{ textSnackbar }}
+            <template v-slot:action="{ attrs }">
+                <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+                    Close
+                </v-btn>
+            </template>
+        </v-snackbar>
     </v-container>
 </template>
+
+<script>
+export default {
+    data:()=>({
+        email:null,
+        emailRules:[
+            v => !!v || 'Email is required',
+            v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+        ],
+        snackbar:false,
+        textSnackbar:null
+    }),
+    methods:{
+        goBack(){
+            this.$router.push({name:'Signin'})
+        },
+        async sendResetMail(){
+            var body = new Object()
+            body.email = this.email
+            var response = await this.$provider.forgotPasswordStepOne(body)
+            console.log(response.data.message);
+            if(response.status == 200){
+                this.textSnackbar = response.data.message
+                this.snackbar = true
+            }
+        }
+    }
+}
+</script>

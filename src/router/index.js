@@ -13,6 +13,7 @@ import Signup from '@/views/SignUp'
 import ForgotPassword from '@/views/ForgotPassword'
 import Clients from '@/views/Clients'
 import CompleteConfig from '@/views/CompleteConfig'
+import ForgotPasswordSecond from '@/views/ForgotPasswordSecond'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
         path:'forgotpassword',
         name:'Forgot password',
         component:ForgotPassword
+      },
+      {
+        path:'forgotPasswordSecond/:uuid',
+        name:'ForgotPasswordSecond',
+        component: ForgotPasswordSecond
       }
     ],
     beforeEnter:(to, from, next) => {

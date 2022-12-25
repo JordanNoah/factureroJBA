@@ -1,8 +1,9 @@
-import { v4 } from "uuid";
+import router from '../router'
 
 const global = {
-    initSession(){
-        localStorage.setItem('sessionKey',v4())
+    initSession(user){
+        localStorage.setItem('sessionKey',user.uuid)
+        router.push({name:'Dashboard'})
     },
     removeSession(){
         localStorage.removeItem('sessionKey')

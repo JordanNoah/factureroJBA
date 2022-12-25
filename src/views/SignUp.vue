@@ -62,21 +62,23 @@
                         </v-row>
                             <v-row justify="center">
                                 <v-col cols="6">
-                                    <v-row>
-                                        <v-col cols="6">
-                                            <v-text-field outlined dense label="Name"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="6">
-                                            <v-text-field outlined dense label="Username"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-text-field outlined dense label="Email"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-text-field outlined dense label="Password"></v-text-field>
-                                        </v-col>
-                                        <v-checkbox label="Creating an account means you’re okay with our Terms of Service, Privacy Policy, and our default Notification Settings."></v-checkbox>
-                                    </v-row>
+                                    <v-form ref="form" v-model="valid" lazy-validation>
+                                        <v-row>
+                                            <v-col cols="6">
+                                                <v-text-field v-model="name" outlined dense label="Name" :rules="nameRules"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="6">
+                                                <v-text-field v-model="username" outlined dense label="Username" :rules="usernameRules"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12">
+                                                <v-text-field v-model="email" outlined dense label="Email" :rules="emailRules"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12">
+                                                <v-text-field v-model="password" outlined dense label="Password" :rules="passwordRules" :type="showPassword ? 'text' : 'password'" :append-icon="showPassword ? 'far fa-eye' : 'far fa-eye-slash'" @click:append="showPassword = !showPassword"></v-text-field>
+                                            </v-col>
+                                            <v-checkbox :rules="termsRules" label="Creating an account means you’re okay with our Terms of Service, Privacy Policy, and our default Notification Settings."></v-checkbox>
+                                        </v-row>
+                                    </v-form>
                                 </v-col>
                             </v-row>
                         
@@ -96,12 +98,48 @@
 
 <script>
 export default {
+    data: () => ({
+        name:null,
+        username:null,
+        email:null,
+        password:null,
+        terms:false,
+        valid:true,
+        //rules
+        nameRules:[
+            v => !!v || 'Name is required'
+        ],
+        usernameRules:[
+            v => !!v || 'Username is required'
+        ],
+        emailRules:[
+            v => !!v || 'Email is required',
+            v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+        ],
+        passwordRules:[
+            v => !!v || 'Password is required'
+        ],
+        termsRules:[
+            v => !!v || 'You must agree to continue!'
+        ],
+        //configs
+        showPassword:false
+    }),
     methods:{
-        initSession(){
-            this.$global.initSession()
-            this.$router.push({name:'Dashboard'}).catch((e) => {
-                console.log(e);
-            })
+        async initSession(){
+            if(this.$refs.form.validate()){
+                var body = new Object()
+                body.name = this.name
+                body.username = this.username
+                body.email = this.email
+                body.password = this.password
+
+                var response = await this.$provider.signUp(body)
+                if(response.status){
+                    this.$global.initSession(response.data.user)
+                }
+                console.log(response.data.user);
+            }
         }
     }
 }
