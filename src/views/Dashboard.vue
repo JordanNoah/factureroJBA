@@ -91,6 +91,10 @@ export default {
             { text: 'Invoice',icon:"fas fa-file-invoice-dollar",path:'/dashboard/invoice'}
         ]
     }),
+    mounted: async function(){
+        //var response = await this.$provider.getInstitution()
+        //console.log(response);
+    },
     methods:{
         setDarkmode(){
             this.$vuetify.theme.dark = !this.$vuetify.theme.dark;

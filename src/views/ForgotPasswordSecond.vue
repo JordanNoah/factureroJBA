@@ -73,9 +73,7 @@
     },
     methods: {
       resetPassword(){
-        if(this.$refs.form.validate()){
-          
-        }
+        this.$refs.form.validate()
       }
     },
   }

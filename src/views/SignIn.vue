@@ -108,7 +108,8 @@ export default {
             
             var response = await this.$provider.signIn(body)
             if(response.data){
-                this.$global.initSession(response.data.user)
+                this.$store.commit('initSession',response.data)
+                //this.$global.initSession(response.data.token)
             }
         }
     }

@@ -14,6 +14,9 @@ export default {
   data: () => ({
     //
   }),
+  beforeMount:function(){
+    this.$store.commit('setUser')
+    },
   mounted:function(){
     this.$vuetify.theme.dark = true
   }

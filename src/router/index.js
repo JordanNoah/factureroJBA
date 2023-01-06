@@ -7,116 +7,116 @@ import Branch from '@/views/Branchs'
 import Product from '@/views/Product'
 import Post from '@/views/Post'
 import Invoice from '@/views/Invoice'
-import Global from '@/plugins/global'
 import Signin from '@/views/SignIn'
 import Signup from '@/views/SignUp'
 import ForgotPassword from '@/views/ForgotPassword'
 import Clients from '@/views/Clients'
-import CompleteConfig from '@/views/CompleteConfig'
 import ForgotPasswordSecond from '@/views/ForgotPasswordSecond'
+import ConfigInitial from '@/views/config/Initial'
+
+import store from '@/store'
+
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path:'/',
-    redirect:{
-      name:'Account'
+const routes = [{
+    path: '/',
+    redirect: {
+      name: 'Account'
     }
   },
   {
-    path:'/account',
-    name:'Account',
-    component:Account,
-    redirect:{
-      name:'Signin'
+    path: '/account',
+    name: 'Account',
+    component: Account,
+    redirect: {
+      name: 'Signin'
     },
-    children:[
-      {
-        path:'signin',
-        name:'Signin',
-        component:Signin
+    beforeEnter:(to,from,next) => {
+      if(!store.getters.getLogin){
+        next()
+      }else{
+        next({name: 'Dashboard'})
+      }
+    },
+    children: [{
+        path: 'signin',
+        name: 'Signin',
+        component: Signin
       },
       {
-        path:'signup',
-        name:'Signup',
-        component:Signup
+        path: 'signup',
+        name: 'Signup',
+        component: Signup
       },
       {
-        path:'forgotpassword',
-        name:'Forgot password',
-        component:ForgotPassword
+        path: 'forgotpassword',
+        name: 'Forgot password',
+        component: ForgotPassword
       },
       {
-        path:'forgotPasswordSecond/:uuid',
-        name:'ForgotPasswordSecond',
+        path: 'forgotPasswordSecond/:uuid',
+        name: 'ForgotPasswordSecond',
         component: ForgotPasswordSecond
       }
     ],
-    beforeEnter:(to, from, next) => {
-      var response = Global.checkSession()
-      if (response) {
-        next({
-          name:'Dashboard'
-        })
-      }
-      next()
-    }
   },
   {
-    path:'/dashboard',
-    name:'Dashboard',
-    component:Dashboard,
-    redirect:{
-      name:'Resume'
-    },
-    beforeEnter: (to, from, next) => {
-      var response = Global.checkSession()
-      if (!response) {
-        next({
-          name:'Account'
-        })
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    beforeEnter: async (to,form,next) => {
+      if (!store.getters.getInstitution) {
+        next({name:'Configinitial'})
+      }else{
+        next()
       }
-      next()
     },
-    children:[
+    children: [
       {
-        path:'completeConfig',
-        name:'CompleteConfig',
-        component: CompleteConfig
-      },
-      {
-        path:'resume',
-        name:'Resume',
+        path: 'resume',
+        name: 'Resume',
         component: Resume
       },
       {
-        path:'branchs',
-        name:'Branch',
-        component:Branch
+        path: 'branchs',
+        name: 'Branch',
+        component: Branch
       },
       {
-        path:'products',
-        name:'Products',
-        component:Product
+        path: 'products',
+        name: 'Products',
+        component: Product
       },
       {
-        path:'post',
-        name:'Post',
-        component:Post
+        path: 'post',
+        name: 'Post',
+        component: Post
       },
       {
-        path:'invoice',
-        name:'Invoice',
-        component:Invoice
+        path: 'invoice',
+        name: 'Invoice',
+        component: Invoice
       },
       {
-        path:'clients',
-        name:'Clients',
-        component:Clients
+        path: 'clients',
+        name: 'Clients',
+        component: Clients
       }
     ]
-  }
+  },
+  {
+    path: '/initial',
+    name: 'Configinitial',
+    component: ConfigInitial,
+    beforeEnter:(to,from,next) => {
+      if(!store.getters.getInstitution){
+        next()
+      }else{
+        next({name:'Dashboard'})
+      }
+    }
+  },
 ]
 
 const router = new VueRouter({

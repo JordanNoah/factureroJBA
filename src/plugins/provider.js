@@ -7,7 +7,7 @@ const provider = {
         return await axios.post("/users",body)
     },
     signIn: async (body) => {
-        return await axios.get(`/users/login/${body.email}/${body.password}`)
+        return await axios.post(`/login`,body)
     },
     //
     forgotPasswordStepOne: async (body) => {
@@ -18,6 +18,14 @@ const provider = {
     },
     checkCodeForgotPassword: async (body) => {
         return await axios.post(`/recoverPassword/check_code`,body).catch((e)=> {return e.response})
+    },
+    //
+    createInstitution: async (body) => {
+        return await axios.post(`/institutions`,body)
+    },
+    //
+    getAccount: async (uuid) => {
+        return await axios.get(`/account/${uuid}`)
     }
 }
 

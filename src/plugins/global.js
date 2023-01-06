@@ -1,9 +1,9 @@
-import router from '../router'
+import store from '../store'
 
 const global = {
-    initSession(user){
-        localStorage.setItem('sessionKey',user.uuid)
-        router.push({name:'Dashboard'})
+    initSession(token){
+        localStorage.setItem('sessionKey',token)
+        //router.push({name:'Dashboard'})
     },
     removeSession(){
         localStorage.removeItem('sessionKey')
@@ -22,7 +22,14 @@ const global = {
           color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
-    } 
+    },
+    checkBasicConfig(){
+        if(store.state.institutionConfig){
+            return true
+        }else{
+            return false
+        }
+    }
 }
 
 export default global;
